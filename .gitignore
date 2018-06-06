@@ -2,3 +2,16 @@
 datasets
 PythonCode/intermediate_datafiles/
 PythonCode/Example_graphs/
+
+# ignore inttelij/pycharm stuff
+.idea
+
+# ignore virtual environment
+venv/
+# called my conda environment cenv...
+cenv/
+
+__pycache__
+
+# wanna b macpleb proof
+.DS_Store

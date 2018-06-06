@@ -1,19 +1,7 @@
-##############################################################
-#                                                            #
-#    Mark Hoogendoorn and Burkhardt Funk (2017)              #
-#    Machine Learning for the Quantified Self                #
-#    Springer                                                #
-#    Chapter 2                                               #
-#                                                            #
-##############################################################
-
-
-dataset_path = '../assignment1/data_modified/'
-#'../datasets/crowdsignals.io/csv-participant-one/'
+dataset_path = '../assignment1/axel-data-parsed/'
 result_dataset_path = './intermediate_datafiles/'
 
 # Import the relevant classes.
-
 from Chapter2.CreateDataset import CreateDataset
 from util.VisualizeDataset import VisualizeDataset
 from util import util
@@ -24,8 +12,6 @@ import os
 if not os.path.exists(result_dataset_path):
     print('Creating result directory: ' + result_dataset_path)
     os.makedirs(result_dataset_path)
-
-# Chapter 2: Initial exploration of the dataset.
 
 # Set a granularity (i.e. how big are our discrete time steps). We start very
 # coarse grained, namely one measurement per minute, and secondly use four measurements
@@ -43,9 +29,9 @@ for milliseconds_per_instance in granularities:
 
     # We add the accelerometer and magnetometer data (continuous numerical measurements) of the phone
     # and aggregate the values per timestep by averaging the values/
-    DataSet.add_numerical_dataset('BMI160_Accelerometer.csv', 'timestamp', ['x','y','z'], 'avg', 'acc_phone_')
+    DataSet.add_numerical_dataset('parsed_accelerometer.csv', 'timestamps', ['x','y','z'], 'avg', 'acc_phone_')
 
-    DataSet.add_numerical_dataset('AK09911_Magnetometer.csv', 'timestamp', ['x','y','z'], 'avg', 'mag_phone_')
+    #DataSet.add_numerical_dataset('AK09911_Magnetometer.csv', 'timestamp', ['x','y','z'], 'avg', 'mag_phone_')
 
     # We add the labels provided by the users. These are categorical events that might overlap. We add them
     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
@@ -64,7 +50,7 @@ for milliseconds_per_instance in granularities:
     DataViz.plot_dataset_boxplot(dataset, ['acc_phone_x','acc_phone_y','acc_phone_z'])
 
     # Plot all data
-    DataViz.plot_dataset(dataset, ['acc_', 'mag_', ], ['like', 'like'], ['line', 'points'])
+    DataViz.plot_dataset(dataset, ['acc_'], ['like'], ['line'])
 
     # And print a summary of the dataset
 
