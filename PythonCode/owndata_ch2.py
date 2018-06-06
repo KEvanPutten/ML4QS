@@ -41,33 +41,16 @@ for milliseconds_per_instance in granularities:
 
     # Add the selected measurements to it.
 
-    # We add the accelerometer data (continuous numerical measurements) of the phone
+    # We add the accelerometer and magnetometer data (continuous numerical measurements) of the phone
     # and aggregate the values per timestep by averaging the values/
     DataSet.add_numerical_dataset('BMI160_Accelerometer.csv', 'timestamp', ['x','y','z'], 'avg', 'acc_phone_')
 
-    # We add the gyroscope data (continuous numerical measurements) of the phone and the smartwatch
-    # and aggregate the values per timestep by averaging the values/
     DataSet.add_numerical_dataset('AK09911_Magnetometer.csv', 'timestamp', ['x','y','z'], 'avg', 'mag_phone_')
-
-    # We add the heart rate (continuous numerical measurements) and aggregate by averaging again
-    #DataSet.add_numerical_dataset('heart_rate_smartwatch.csv', 'timestamps', ['rate'], 'avg', 'hr_watch_')
 
     # We add the labels provided by the users. These are categorical events that might overlap. We add them
     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
     # occurs within an interval).
     #DataSet.add_event_dataset('labels.csv', 'label_start', 'label_end', 'label', 'binary')
-
-    # We add the amount of light sensed by the phone (continuous numerical measurements) and aggregate by averaging again
-    #DataSet.add_numerical_dataset('light_phone.csv', 'timestamps', ['lux'], 'avg', 'light_phone_')
-
-    # We add the magnetometer data (continuous numerical measurements) of the phone and the smartwatch
-    # and aggregate the values per timestep by averaging the values
-    #DataSet.add_numerical_dataset('magnetometer_phone.csv', 'timestamps', ['x','y','z'], 'avg', 'mag_phone_')
-    #DataSet.add_numerical_dataset('magnetometer_smartwatch.csv', 'timestamps', ['x','y','z'], 'avg', 'mag_watch_')
-
-    # We add the pressure sensed by the phone (continuous numerical measurements) and aggregate by averaging again
-    #DataSet.add_numerical_dataset('pressure_phone.csv', 'timestamps', ['pressure'], 'avg', 'press_phone_')
-    #DataSet.add_numerical_dataset('pressure_phone.csv', 'timestamps', ['pressure'], 'avg', 'press_phone_')
 
     # Get the resulting pandas data table
 
@@ -90,7 +73,7 @@ for milliseconds_per_instance in granularities:
 
 # And print the table that has been included in the book
 
-#util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
+util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
 
 # Finally, store the last dataset we have generated (250 ms).
 dataset.to_csv(result_dataset_path + 'owndata_chapter2_result.csv')
