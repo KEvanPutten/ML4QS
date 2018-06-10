@@ -36,6 +36,7 @@ class FourierTransformation:
             data_table[col + '_pse'] = np.nan
             data_table[col + '_freq_skewness'] = np.nan
             data_table[col + '_freq_kurtosis'] = np.nan
+            data_table[col + '_freq_energy'] = np.nan
             for freq in freqs:
                 data_table[col + '_freq_' + str(freq) + '_Hz_ws_' + str(window_size)] = np.nan
 
@@ -56,7 +57,7 @@ class FourierTransformation:
                 data_table.ix[i, col + '_pse'] = -np.sum(np.log(PSD_pdf) * PSD_pdf)
 
                 data_table.ix[i, col + '_freq_skewness'] = stats.skew(real_ampl)
-
                 data_table.ix[i, col + '_freq_kurtosis'] = stats.kurtosis(real_ampl)
+                data_table.ix[i, col + '_freq_energy'] = np.sum(np.square(real_ampl))
 
         return data_table

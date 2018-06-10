@@ -21,7 +21,7 @@ DataViz = VisualizeDataset()
 # Read the result from the previous chapter, and make sure the index is of the type datetime.
 dataset_path = './intermediate_datafiles/'
 try:
-    dataset = pd.read_csv(dataset_path + 'chapter3_result_final.csv', index_col=0)
+    dataset = pd.read_csv(dataset_path + 'test.csv', index_col=0)
 except IOError as e:
     print('File not found, try to run previous crowdsignals scripts first!')
     raise e
@@ -70,7 +70,7 @@ periodic_predictor_cols = ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_
 data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), ['acc_phone_x'],
                                         int(float(10000) / milliseconds_per_instance), fs)
 DataViz.plot_dataset(data_table, ['acc_phone_x'+'_max_freq', 'acc_phone_x'+'_freq_weighted', 'acc_phone_x'+'_pse',
-                                  'acc_phone_x'+'_freq_skewness', 'acc_phone_x'+'_freq_kurtosis', 'label'], ['like',
+                                  'acc_phone_x'+'_freq_skewness', 'acc_phone_x'+'_freq_energy', 'label'], ['like',
                                   'like', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'line', 'points'])
 
 
