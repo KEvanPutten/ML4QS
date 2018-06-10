@@ -28,7 +28,7 @@ except IOError as e:
 
 dataset.index = dataset.index.to_datetime()
 
-# Compute the number of milliseconds covered by an instane based on the first two rows
+# Compute the number of milliseconds covered by an instance based on the first two rows
 milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).microseconds/1000
 
 
@@ -44,8 +44,9 @@ dataset_copy = copy.deepcopy(dataset)
 for ws in window_sizes:
     dataset_copy = NumAbs.abstract_numerical(dataset_copy, ['acc_phone_x'], ws, 'mean')
     dataset_copy = NumAbs.abstract_numerical(dataset_copy, ['acc_phone_x'], ws, 'std')
+    dataset_copy = NumAbs.abstract_numerical(dataset_copy, ['acc_phone_x'], ws, 'MAD')
 
-DataViz.plot_dataset(dataset_copy, ['acc_phone_x', 'acc_phone_x_temp_mean', 'acc_phone_x_temp_std', 'label'], ['exact', 'like', 'like', 'like'], ['line', 'line', 'line', 'points'])
+DataViz.plot_dataset(dataset_copy, ['acc_phone_x', 'acc_phone_x_temp_mean', 'acc_phone_x_temp_std', 'acc_phone_x_temp_MAD', 'label'], ['exact', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'points'])
 
 ws = int(float(0.5*60000)/milliseconds_per_instance)
 selected_predictor_cols = [c for c in dataset.columns if not 'label' in c]
@@ -64,22 +65,22 @@ fs = float(1000)/milliseconds_per_instance
 periodic_predictor_cols = ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_x','acc_watch_y','acc_watch_z','gyr_phone_x','gyr_phone_y',
                            'gyr_phone_z','gyr_watch_x','gyr_watch_y','gyr_watch_z','mag_phone_x','mag_phone_y','mag_phone_z',
                            'mag_watch_x','mag_watch_y','mag_watch_z']
-data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), ['acc_phone_x'], int(float(10000)/milliseconds_per_instance), fs)
 
-# Spectral analysis.
-
-DataViz.plot_dataset(data_table, ['acc_phone_x_max_freq', 'acc_phone_x_freq_weighted', 'acc_phone_x_pse', 'label'], ['like', 'like', 'like', 'like'], ['line', 'line', 'line','points'])
-
-dataset = FreqAbs.abstract_frequency(dataset, periodic_predictor_cols, int(float(10000)/milliseconds_per_instance), fs)
+for c in periodic_predictor_cols:
+    data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), [c],
+                                            int(float(10000) / milliseconds_per_instance), fs)
+    DataViz.plot_dataset(data_table, [c+'_max_freq', c+'_freq_weighted', c+'_pse', 'label'],
+                         ['like', 'like', 'like', 'like'], ['line', 'line', 'line', 'points'])
+#dataset = FreqAbs.abstract_frequency(dataset, periodic_predictor_cols, int(float(10000)/milliseconds_per_instance), fs)
 
 # Now we only take a certain percentage of overlap in the windows, otherwise our training examples will be too much alike.
 
 # The percentage of overlap we allow
-window_overlap = 0.9
-skip_points = int((1-window_overlap) * ws)
-dataset = dataset.iloc[::skip_points,:]
-
-
-dataset.to_csv(dataset_path + 'chapter4_result.csv')
-
-DataViz.plot_dataset(dataset, ['acc_phone_x', 'gyr_phone_x', 'hr_watch_rate', 'light_phone_lux', 'mag_phone_x', 'press_phone_', 'pca_1', 'label'], ['like', 'like', 'like', 'like', 'like', 'like', 'like','like'], ['line', 'line', 'line', 'line', 'line', 'line', 'line', 'points'])
+# window_overlap = 0.9
+# skip_points = int((1-window_overlap) * ws)
+# dataset = dataset.iloc[::skip_points,:]
+#
+#
+# dataset.to_csv(dataset_path + 'chapter4_result.csv')
+#
+# DataViz.plot_dataset(dataset, ['acc_phone_x', 'gyr_phone_x', 'hr_watch_rate', 'light_phone_lux', 'mag_phone_x', 'press_phone_', 'pca_1', 'label'], ['like', 'like', 'like', 'like', 'like', 'like', 'like','like'], ['line', 'line', 'line', 'line', 'line', 'line', 'line', 'points'])

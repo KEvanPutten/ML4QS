@@ -11,8 +11,29 @@ import numpy as np
 import scipy.stats as stats
 
 # Class to abstract a history of numerical values we can use as an attribute.
+from numpy.core.multiarray import ndarray
+
+
 class NumericalAbstraction:
 
+
+    def MAD_value(self, data, median):
+        # We create time points, assuming discrete time steps with fixed delta t:
+        times = np.array(range(0, len(data.index)))
+        data = data.as_matrix().astype(np.float32)
+
+        # Check for NaN's
+        mask = ~np.isnan(data)
+
+        # If we have no data but NaN we return NaN.
+        if (len(data[mask]) == 0):
+            return np.nan
+        # Otherwise we return the median absolute deviation.
+        else:
+            MAD_inter = 0;
+            for i in times:
+               MAD_inter += np.abs(data[i]-median)
+            return np.median(MAD_inter)
 
     # This function aggregates a list of values using the specified aggregation
     # function (which can be 'mean', 'max', 'min', 'median', 'std', 'slope')
@@ -57,9 +78,15 @@ class NumericalAbstraction:
 
         # Pass over the dataset (we cannot compute it when we do not have enough history)
         # and compute the values.
-        for i in range(window_size, len(data_table.index)):
-            for col in cols:
-                data_table.ix[i, col + '_temp_' + aggregation_function + '_ws_' +str(window_size)] = self.aggregate_value(data_table[col][i-window_size:min(i+1, len(data_table.index))], aggregation_function)
+        if aggregation_function == 'MAD':
+            for i in range(window_size, len(data_table.index)):
+                for col in cols:
+                    data_table.ix[i, col + '_temp_' + aggregation_function + '_ws_' +str(window_size)] = self.MAD_value(data_table[col][i-window_size:min(i+1, len(data_table.index))], np.median(data_table[col]))
+
+        else:
+            for i in range(window_size, len(data_table.index)):
+                for col in cols:
+                    data_table.ix[i, col + '_temp_' + aggregation_function + '_ws_' +str(window_size)] = self.aggregate_value(data_table[col][i-window_size:min(i+1, len(data_table.index))], aggregation_function)
 
         return data_table
 
