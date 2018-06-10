@@ -67,11 +67,19 @@ periodic_predictor_cols = ['acc_phone_x','acc_phone_y','acc_phone_z','acc_watch_
                            'gyr_phone_z','gyr_watch_x','gyr_watch_y','gyr_watch_z','mag_phone_x','mag_phone_y','mag_phone_z',
                            'mag_watch_x','mag_watch_y','mag_watch_z']
 
-for c in periodic_predictor_cols:
-    data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), [c],
-                                            int(float(10000) / milliseconds_per_instance), fs)
-    DataViz.plot_dataset(data_table, [c+'_max_freq', c+'_freq_weighted', c+'_pse', 'label'],
-                         ['like', 'like', 'like', 'like'], ['line', 'line', 'line', 'points'])
+data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), ['acc_phone_x'],
+                                        int(float(10000) / milliseconds_per_instance), fs)
+DataViz.plot_dataset(data_table, ['acc_phone_x'+'_max_freq', 'acc_phone_x'+'_freq_weighted', 'acc_phone_x'+'_pse',
+                                  'acc_phone_x'+'_freq_skewness', 'acc_phone_x'+'_freq_kurtosis', 'label'], ['like',
+                                  'like', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'line', 'points'])
+
+
+#print all features
+# for c in periodic_predictor_cols:
+#     data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), [c],
+#                                             int(float(10000) / milliseconds_per_instance), fs)
+#     DataViz.plot_dataset(data_table, [c+'_max_freq', c+'_freq_weighted', c+'_pse', c+'_freq_skewness', c+'_freq_kurtosis', 'label'],
+#                          ['like', 'like', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'line', 'points'])
 #dataset = FreqAbs.abstract_frequency(dataset, periodic_predictor_cols, int(float(10000)/milliseconds_per_instance), fs)
 
 # Now we only take a certain percentage of overlap in the windows, otherwise our training examples will be too much alike.
