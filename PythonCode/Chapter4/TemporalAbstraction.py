@@ -65,6 +65,8 @@ class NumericalAbstraction:
             else:
                 slope, intercept, r_value, p_value, std_err = stats.linregress(times[mask], data[mask])
                 return slope
+        elif aggregation_function == 'kurtosis':
+            return stats.kurtosis(data)
         else:
             return np.nan
 
