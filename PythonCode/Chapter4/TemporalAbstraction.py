@@ -16,7 +16,8 @@ from numpy.core.multiarray import ndarray
 
 class NumericalAbstraction:
 
-
+    # this agrregation function is seperated from the others because it requires the median of
+    # all the values of a feature, not just within the time interval.
     def MAD_value(self, data, median):
         # We create time points, assuming discrete time steps with fixed delta t:
         times = np.array(range(0, len(data.index)))
