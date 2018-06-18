@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-dataset_path = '../intermediate_datafiles_ass3/'
+dataset_path = './intermediate_datafiles_ass3/'
 
 try:
     dataset = pd.read_csv(dataset_path + 'ConfLongDemo_JSI.csv', index_col=0)
