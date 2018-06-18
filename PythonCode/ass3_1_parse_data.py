@@ -15,8 +15,14 @@ dataset.reset_index(inplace=True)
 # add new columns to data
 columns = ['ankle_l_x', 'ankle_l_y', 'ankle_l_z', 'ankle_r_x', 'ankle_r_y', 'ankle_r_z',
            'belt_x', 'belt_y', 'belt_z', 'chest_x', 'chest_y', 'chest_z']
+labels = ['labelWalking', 'labelFalling', 'labelLyingDown', 'labelLying', 'labelSittingDown', 'labelSitting',
+          'labelStandingFromLying', 'labelOnAllFours', 'labelSittingOnTheGround', 'labelStandingFromSitting',
+          'labelStandingFromSittingOnTheGround']
 for c in columns:
     dataset[c] = np.nan
+
+for l in labels:
+    dataset[l] = 0
 
 # copy data to appropriate columns
 dataset_copy = dataset.copy()
@@ -36,6 +42,18 @@ dataset_copy.loc[dataset['sensor_id'] == '020-000-033-111', 'chest_z'] = dataset
 dataset_copy.loc[dataset['sensor_id'] == '020-000-032-221', 'belt_x'] = dataset['x']
 dataset_copy.loc[dataset['sensor_id'] == '020-000-032-221', 'belt_y'] = dataset['y']
 dataset_copy.loc[dataset['sensor_id'] == '020-000-032-221', 'belt_z'] = dataset['z']
+
+dataset_copy.loc[dataset['activity_label'] == 'walking', 'labelWalking'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'falling', 'labelFalling'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'lying down', 'labelLyingDown'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'lying', 'labelLying'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'sitting down', 'labelSittingDown'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'sitting', 'labelSitting'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'standing up from lying', 'labelStandingFromLying'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'on all fours', 'labelOnAllFours'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'sitting on the ground', 'labelSittingOnTheGround'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'standing up from sitting', 'labelStandingFromSitting'] = 1
+dataset_copy.loc[dataset['activity_label'] == 'standing up from sitting on the ground', 'labelStandingFromSittingOnTheGround'] = 1
 
 
 # And store it all!

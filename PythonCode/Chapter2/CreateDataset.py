@@ -123,3 +123,35 @@ class CreateDataset():
             relevant_dataset_cols.extend([col for col in cols if id in col])
 
         return relevant_dataset_cols
+
+    # Add numerical data, we assume timestamps in the form of nanoseconds from the epoch
+    def add_binary_labels_dataset(self, file, timestamp_col, value_cols, aggregation='avg', prefix=''):
+        dataset = pd.read_csv(self.base_dir + file, skipinitialspace=True)
+
+        # Convert timestamps to dates
+        dataset[timestamp_col] = pd.to_datetime(dataset[timestamp_col])
+
+        # Create a table based on the times found in the dataset
+        if self.data_table is None:
+            self.create_dataset(min(dataset[timestamp_col]), max(dataset[timestamp_col]), value_cols, prefix)
+        else:
+            for col in value_cols:
+                self.data_table[str(prefix) + str(col)] = np.nan
+
+        # Over all rows in the new table
+        for i in range(0, len(self.data_table.index)):
+            # Select the relevant measurements.
+            relevant_rows = dataset[
+                (dataset[timestamp_col] >= self.data_table.index[i]) &
+                (dataset[timestamp_col] < (self.data_table.index[i] +
+                                           timedelta(milliseconds=self.granularity)))
+            ]
+            for col in value_cols:
+                # Take the average value
+                if len(relevant_rows) > 0:
+                    if aggregation == 'max':
+                        self.data_table.loc[self.data_table.index[i], str(prefix)+str(col)] = np.amax(relevant_rows[col])
+                    else:
+                        raise ValueError("Unknown aggregation '" + aggregation + "'")
+                else:
+                    self.data_table.loc[self.data_table.index[i], str(prefix)+str(col)] = np.nan
