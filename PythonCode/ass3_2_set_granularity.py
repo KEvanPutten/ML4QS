@@ -8,7 +8,7 @@
 ##############################################################
 
 
-dataset_path = './ass3_rawdata/'
+dataset_path = './ass3_newdata/parsed/'
 result_dataset_path = './intermediate_datafiles_ass3/'
 
 # Import the relevant classes.
@@ -30,7 +30,7 @@ if not os.path.exists(result_dataset_path):
 # coarse grained, namely one measurement per minute, and secondly use four measurements
 # per second
 
-granularities = [60000, 250]
+granularities = [250]
 datasets = []
 
 for milliseconds_per_instance in granularities:
@@ -41,18 +41,22 @@ for milliseconds_per_instance in granularities:
     # Add the selected measurements to it.
 
     # Add numerical measurements
-    DataSet.add_numerical_dataset('A01_parsed_raw_data.csv', 'timestamp',
-                                  ['ankle_l_x', 'ankle_l_y', 'ankle_l_z', 'ankle_r_x', 'ankle_r_y', 'ankle_r_z',
-                                   'belt_x', 'belt_y', 'belt_z', 'chest_x', 'chest_y', 'chest_z'], 'avg', '')
+    DataSet.add_numerical_dataset('accelerometer.csv', 'timestamps', ['x','y','z'], 'avg', 'acc_')
+
+    DataSet.add_numerical_dataset('linear_acceleration.csv', 'timestamps', ['x','y','z'], 'avg', 'lin_acc_')
+
+    DataSet.add_numerical_dataset('magnetometer.csv', 'timestamps', ['x','y','z'], 'avg', 'mag_')
+
+    DataSet.add_numerical_dataset('Gyroscope.csv', 'timestamps', ['x', 'y', 'z'], 'avg', 'gyr_')
+
+    DataSet.add_numerical_dataset('light.csv', 'timestamps', ['illuminance'], 'avg', 'light_')
+
+    DataSet.add_numerical_dataset('location.csv', 'timestamps', ['latitude','height','velocity'], 'avg', 'loc_')
 
     # We add the labels provided by the users. These are categorical events that might overlap. We add them
     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
     # occurs within an interval).
-    DataSet.add_binary_labels_dataset('A01_parsed_raw_data.csv', 'timestamp',
-                                      ['labelWalking', 'labelFalling', 'labelLyingDown', 'labelLying',
-                                       'labelSittingDown', 'labelSitting', 'labelStandingFromLying', 'labelOnAllFours',
-                                       'labelSittingOnTheGround', 'labelStandingFromSitting',
-                                       'labelStandingFromSittingOnTheGround'], 'max', '')
+    DataSet.add_event_dataset('labels.csv', 'label_start', 'label_end', 'label', 'binary')
 
     # Get the resulting pandas data table
 
@@ -63,20 +67,22 @@ for milliseconds_per_instance in granularities:
     DataViz = VisualizeDataset()
 
     # Boxplot
-    DataViz.plot_dataset_boxplot(dataset, ['ankle_l_x', 'ankle_l_y', 'ankle_l_z', 'ankle_r_x', 'ankle_r_y', 'ankle_r_z',
-                                           'belt_x', 'belt_y', 'belt_z', 'chest_x', 'chest_y', 'chest_z'])
+    DataViz.plot_dataset_boxplot(dataset, ['acc_x','acc_y','acc_z'])
+    DataViz.plot_dataset_boxplot(dataset, ['gyr_x', 'gyr_y', 'gyr_z'])
+    DataViz.plot_dataset_boxplot(dataset, ['mag_x', 'mag_y', 'mag_z'])
 
     # Plot all data
-    DataViz.plot_dataset(dataset, ['ankle_l_', 'ankle_r_', 'belt_', 'chest_', 'label'], ['like', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'points'])
+    DataViz.plot_dataset(dataset,
+                         ['acc_', 'mag_', 'gyr_', 'light_', 'loc_', 'lin_acc_', 'label'],
+                         ['like', 'like', 'like', 'like', 'like', 'like', 'like'],
+                         ['line', 'line', 'line', 'line', 'line', 'line', 'points'])
 
-    # And print a summary of the dataset
-
+    # print a summary of the dataset
     util.print_statistics(dataset)
     datasets.append(copy.deepcopy(dataset))
 
 # And print the table that has been included in the book
-
-util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
+# util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
 
 # Finally, store the last dataset we have generated (250 ms).
-#dataset.to_csv(result_dataset_path + 'chapter2_result.csv')
+dataset.to_csv(result_dataset_path + 'aggregation_result.csv')
