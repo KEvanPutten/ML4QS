@@ -74,7 +74,7 @@ def parse_nanopoch(file_name):
         print("Written " + output_file_name + "!")
 
 
-if __name__ == '__main__':
+def parse_all_files():
     # test_dt_to_epoch()
     # test_dotnet_to_dt()
 
@@ -86,3 +86,13 @@ if __name__ == '__main__':
     for f in files:
         parse_nanopoch(f)
     print("see you around cowboy.")
+
+
+def parse_almighty_file():
+    parse_nanopoch('parsed_raw_data.csv')
+    print("see you around cowgirl.")
+
+
+if __name__ == '__main__':
+    #parse_all_files
+    parse_almighty_file()
