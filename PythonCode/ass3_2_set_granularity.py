@@ -30,7 +30,7 @@ if not os.path.exists(result_dataset_path):
 # coarse grained, namely one measurement per minute, and secondly use four measurements
 # per second
 
-granularities = [250]
+granularities = [60000, 250]
 datasets = []
 
 for milliseconds_per_instance in granularities:
@@ -53,10 +53,13 @@ for milliseconds_per_instance in granularities:
 
     DataSet.add_numerical_dataset('location.csv', 'timestamps', ['latitude','height','velocity'], 'avg', 'loc_')
 
+
     # We add the labels provided by the users. These are categorical events that might overlap. We add them
     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
     # occurs within an interval).
+
     DataSet.add_event_dataset('labels.csv', 'label_start', 'label_end', 'label', 'binary')
+
 
     # Get the resulting pandas data table
 
@@ -86,3 +89,4 @@ for milliseconds_per_instance in granularities:
 
 # Finally, store the last dataset we have generated (250 ms).
 dataset.to_csv(result_dataset_path + 'aggregation_result.csv')
+
