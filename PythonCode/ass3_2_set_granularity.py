@@ -30,7 +30,7 @@ if not os.path.exists(result_dataset_path):
 # coarse grained, namely one measurement per minute, and secondly use four measurements
 # per second
 
-granularities = [60000, 250]
+granularities = [60000, 2500]
 datasets = []
 
 for milliseconds_per_instance in granularities:
@@ -41,14 +41,14 @@ for milliseconds_per_instance in granularities:
     # Add the selected measurements to it.
 
     # Add numerical measurements
-    DataSet.add_numerical_dataset('A01_parsed_raw_data.csv', 'timestamp',
+    DataSet.add_numerical_dataset('A01_parsed_raw_data.csv', 'timestamps',
                                   ['ankle_l_x', 'ankle_l_y', 'ankle_l_z', 'ankle_r_x', 'ankle_r_y', 'ankle_r_z',
                                    'belt_x', 'belt_y', 'belt_z', 'chest_x', 'chest_y', 'chest_z'], 'avg', '')
 
     # We add the labels provided by the users. These are categorical events that might overlap. We add them
     # as binary attributes (i.e. add a one to the attribute representing the specific value for the label if it
     # occurs within an interval).
-    DataSet.add_binary_labels_dataset('A01_parsed_raw_data.csv', 'timestamp',
+    DataSet.add_binary_labels_dataset('A01_parsed_raw_data.csv', 'timestamps',
                                       ['labelWalking', 'labelFalling', 'labelLyingDown', 'labelLying',
                                        'labelSittingDown', 'labelSitting', 'labelStandingFromLying', 'labelOnAllFours',
                                        'labelSittingOnTheGround', 'labelStandingFromSitting',
@@ -79,4 +79,4 @@ for milliseconds_per_instance in granularities:
 util.print_latex_table_statistics_two_datasets(datasets[0], datasets[1])
 
 # Finally, store the last dataset we have generated (250 ms).
-#dataset.to_csv(result_dataset_path + 'chapter2_result.csv')
+dataset.to_csv(result_dataset_path + 'chapter2_result.csv')
