@@ -36,7 +36,7 @@ def readfile(name, date):
             ret += '\naccelerometer,smartphone,{},{},{},{}'.format(nanos,lat,longi,height,velo,direc,hacc,vacc)
     return [ret, last]
 
-files = ['Location.csv']
+files = ['Location.csv', '2nd-measure/Location.csv']
 
 output = open("parsed/location.csv", 'w');
 output.write('sensor_type,device_type,timestamps,latitude,height,velocity,direction,hor_accuracy,ver_accuracy')

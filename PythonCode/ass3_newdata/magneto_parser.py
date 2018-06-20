@@ -32,7 +32,7 @@ def readfile(name, date):
             ret += '\nmagnetometer,smartphone,{},{},{},{}'.format(nanos,x,y,z)
     return [ret, last]
 
-files = ['Magnetometer.csv']
+files = ['Magnetometer.csv', '2nd-measure/Magnetometer.csv']
 
 output = open("parsed/magnetometer.csv", 'w');
 output.write('sensor_type,device_type,timestamps,x,y,z')

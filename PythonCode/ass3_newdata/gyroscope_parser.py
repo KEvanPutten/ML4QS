@@ -32,7 +32,7 @@ def readfile(name, date):
             ret += '\ngyroscope,smartphone,{},{},{},{}'.format(nanos,x,y,z)
     return [ret, last]
 
-files = ['Gyroscope.csv']
+files = ['Gyroscope.csv', '2nd-measure/Gyroscope.csv']
 
 output = open("parsed/gyroscope.csv", 'w');
 output.write('sensor_type,device_type,timestamps,x,y,z')

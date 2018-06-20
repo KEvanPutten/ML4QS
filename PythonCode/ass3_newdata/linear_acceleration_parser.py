@@ -33,7 +33,7 @@ def readfile(name, date):
             ret += '\naccelerometer,smartphone,{},{},{},{}'.format(nanos,x,y,z)
     return [ret, last]
 
-files = ['Linear Acceleration.csv']
+files = ['Linear Acceleration.csv', '2nd-measure/Linear Acceleration.csv']
 
 output = open("parsed/linear_acceleration.csv", 'w');
 output.write('sensor_type,device_type,timestamps,x,y,z')

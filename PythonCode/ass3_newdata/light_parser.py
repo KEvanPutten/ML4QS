@@ -30,7 +30,7 @@ def readfile(name, date):
             ret += '\nlight,smartphone,{},{}'.format(nanos,lux)
     return [ret, last]
 
-files = ['Light.csv']
+files = ['Light.csv', '2nd-measure/Light.csv']
 
 output = open("parsed/light.csv", 'w');
 output.write('sensor_type,device_type,timestamps,illuminance')
