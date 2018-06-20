@@ -72,7 +72,6 @@ for milliseconds_per_instance in granularities:
     # Boxplot
     DataViz.plot_dataset_boxplot(dataset, ['acc_x','acc_y','acc_z'])
     DataViz.plot_dataset_boxplot(dataset, ['gyr_x', 'gyr_y', 'gyr_z'])
-    DataViz.plot_dataset_boxplot(dataset, ['mag_x', 'mag_y', 'mag_z'])
 
     # Plot all data
     DataViz.plot_dataset(dataset,
