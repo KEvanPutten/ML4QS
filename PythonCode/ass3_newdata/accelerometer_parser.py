@@ -25,7 +25,6 @@ def readfile(name, date):
             y = float(row[2])
             z = float(row[3])
 
-
             last = dt = date + datetime.timedelta(seconds=time_passed)
             milis = unix_time_millis(dt)
             nanos = int(milis*1000000)
@@ -33,7 +32,7 @@ def readfile(name, date):
             ret += '\naccelerometer,smartphone,{},{},{},{}'.format(nanos,x,y,z)
     return [ret, last]
 
-files = ['Accelerometer.csv']
+files = ['Accelerometer.csv', '2nd-measure/Accelerometer.csv']
 
 output = open("parsed/accelerometer.csv", 'w');
 output.write('sensor_type,device_type,timestamps,x,y,z')
