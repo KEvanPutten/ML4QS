@@ -18,7 +18,7 @@ import numpy as np
 DataViz = VisualizeDataset()
 
 # Read the result from the previous chapter, and make sture the index is of the type datetime.
-dataset_path = './intermediate_datafiles/'
+dataset_path = './intermediate_datafiles_ass3/'
 try:
     dataset = pd.read_csv(dataset_path + 'aggregation_result.csv', index_col=0)
 except IOError as e:
@@ -33,7 +33,7 @@ milliseconds_per_instance = (dataset.index[1] - dataset.index[0]).microseconds /
 # Step 1: Let us see whether we have some outliers we would prefer to remove.
 
 # Determine the columns we want to experiment on.
-outlier_columns = ['acc_x', 'lin_acc_x']
+outlier_columns = ['acc_y', 'lin_acc_x']
 
 # Create the outlier classes.
 OutlierDistr = DistributionBasedOutlierDetection()
@@ -44,22 +44,22 @@ for col in outlier_columns:
     # And try out all different approaches. Note that we have done some optimization
     # of the parameter values for each of the approaches by visual inspection.
     dataset = OutlierDistr.chauvenet(dataset, col)
-    DataViz.plot_binary_outliers(dataset, col, col + '_outlier')
+    DataViz.plot_binary_outliers(dataset, col, col + '_outlier', 'Chauvenets criterion')
     dataset = OutlierDistr.mixture_model(dataset, col)
-    DataViz.plot_dataset(dataset, [col, col + '_mixture'], ['exact', 'exact'], ['line', 'points'])
+    DataViz.plot_dataset(dataset, [col, col + '_mixture'], 'Mixture models', ['exact', 'exact'], ['line', 'points'])
     # This requires:
     # n_data_points * n_data_points * point_size =
     # 31839 * 31839 * 64 bits = ~8GB available memory
     try:
         dataset = OutlierDist.simple_distance_based(dataset, [col], 'euclidean', 0.10, 0.99)
-        DataViz.plot_binary_outliers(dataset, col, 'simple_dist_outlier')
+        DataViz.plot_binary_outliers(dataset, col, 'simple_dist_outlier', 'Simple distance-based approach')
     except MemoryError as e:
         print('Not enough memory available for simple distance-based outlier detection...')
         print('Skipping.')
 
     try:
         dataset = OutlierDist.local_outlier_factor(dataset, [col], 'euclidean', 5)
-        DataViz.plot_dataset(dataset, [col, 'lof'], ['exact', 'exact'], ['line', 'points'])
+        DataViz.plot_dataset(dataset, [col, 'lof'], 'Local outlier factor', ['exact', 'exact'], ['line', 'points'])
     except MemoryError as e:
         print('Not enough memory available for lof...')
         print('Skipping.')
@@ -78,4 +78,4 @@ for col in [c for c in dataset.columns if not 'label' in c]:
     dataset.loc[dataset[col + '_outlier'] == True, col] = np.nan
     del dataset[col + '_outlier']
 
-dataset.to_csv(dataset_path + 'chapter3_result_outliers.csv')
+dataset.to_csv(dataset_path + 'outliers_result.csv')
