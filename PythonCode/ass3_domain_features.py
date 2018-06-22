@@ -52,6 +52,7 @@ for c in cols:
 # Compute the time domain metric and add them to the dataset
 # We select a window size of 30 seconds
 ws = int(float(30000)/milliseconds_per_instance)
+print ws
 selected_predictor_cols = [c for c in dataset.columns if not 'label' in c]
 dataset = NumAbs.abstract_numerical(dataset, selected_predictor_cols, ws, 'mean')
 dataset = NumAbs.abstract_numerical(dataset, selected_predictor_cols, ws, 'std')
@@ -71,27 +72,27 @@ periodic_predictor_cols = ['acc_x','acc_y','acc_z','gyr_x','gyr_y', 'gyr_z',
                            'mag_x','mag_y','mag_z', 'lin_acc_x', 'lin_acc_y', 'lin_acc_z']
 
 # Spectral analysis of ALL features (generates 18 plots)
-
+"""
 for c in periodic_predictor_cols:
     data_table = FreqAbs.abstract_frequency(copy.deepcopy(dataset), [c],
                                             int(float(10000) / milliseconds_per_instance), fs)
     DataViz.plot_dataset(data_table, [c+'_max_freq', c+'_freq_weighted', c+'_pse', c+'_freq_skewness', c+'_freq_kurtosis', 'label'],
                          ['like', 'like', 'like', 'like', 'like', 'like'], ['line', 'line', 'line', 'line', 'line', 'points'])
-
+"""
 
 # Compute and add frequency domain features to dataset
-#dataset = FreqAbs.abstract_frequency(dataset, periodic_predictor_cols, int(float(10000)/milliseconds_per_instance), fs)
+dataset = FreqAbs.abstract_frequency(dataset, periodic_predictor_cols, int(float(10000)/milliseconds_per_instance), fs)
 
 # ------------------------------------------------------------------------------------
 # REDUCE OVERLAP
 print 'reducing overlap.'
 
 # The percentage of overlap we allow
-window_overlap = 0.9
+window_overlap = 0.95
 skip_points = int((1-window_overlap) * ws)
 dataset = dataset.iloc[::skip_points,:]
 
-# dataset.to_csv(dataset_path + 'domain_features_result.csv')
+dataset.to_csv(dataset_path + 'domain_features_result_95.csv')
 
 DataViz.plot_dataset(dataset,
                      ['acc_x', 'gyr_x', 'lin_acc_x', 'light_illuminance', 'mag_x', 'loc_height', 'pca_1', 'label'],
