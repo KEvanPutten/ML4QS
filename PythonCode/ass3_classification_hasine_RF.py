@@ -151,7 +151,7 @@ for i in range(0, len(possible_feature_sets)):
 
     scores_with_sd = util.print_table_row_performances(feature_names[i], len(selected_train_X.index),
                                                        len(selected_test_X.index),
-                                                       [(performance_tr_rf, performance_te_rf)])
+                                                       [(overall_performance_tr_rf, overall_performance_te_rf)])
     scores_over_all_algs.append(scores_with_sd)
 
 print scores_over_all_algs
