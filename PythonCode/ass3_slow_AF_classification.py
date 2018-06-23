@@ -82,13 +82,20 @@ selected_features_with_DT = ['acc_z_freq_0.0_Hz_ws_40', 'loc_height_temp_mean_ws
 learner = ClassificationAlgorithms()
 eval = ClassificationEvaluation()
 
-possible_feature_sets = [basic_features, features_after_outliers_and_imputation, features_after_domain_features,
-                         features_after_cluster_features, selected_features_with_DT, selected_features_with_NB]
-feature_names = ['initial set', 'After imputation', 'With Domain features', 'With cluster features', 'Selected features DT', 'Selected features NB']
+# possible_feature_sets = [basic_features, features_after_outliers_and_imputation, features_after_domain_features,
+#                          features_after_cluster_features, selected_features_with_DT, selected_features_with_NB]
+# feature_names = ['initial set', 'After imputation', 'With Domain features', 'With cluster features', 'Selected features DT', 'Selected features NB']
 
-#possible_feature_sets = [basic_features, selected_features_with_DT, selected_features_with_NB, selected_features_with_KNN]
-#feature_names = ['initial set', 'Selected features DT', 'Selected features NB', 'Selected features KNN']
-repeats = 4
+feature_set_axel = [basic_features, features_after_outliers_and_imputation]
+feature_names_axel = ['initial set', 'After imputation']
+
+feature_set_hasine = [features_after_domain_features, features_after_cluster_features]
+feature_names_hasine = ['With Domain features', 'With cluster features']
+
+feature_set_kim = [selected_features_with_DT, selected_features_with_NB]
+feature_names_kim = ['Selected features DT', 'Selected features NB']
+
+# repeats = 4
 
 scores_over_all_algs = []
 
@@ -106,6 +113,7 @@ for i in range(0, len(possible_feature_sets)):
     performance_te_rf = 0
     performance_te_svm = 0
 
+    """
     for repeat in range(0, repeats):
         print repeat
         class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.feedforward_neural_network(selected_train_X, train_y, selected_test_X, gridsearch=True, alpha=10)
@@ -126,32 +134,38 @@ for i in range(0, len(possible_feature_sets)):
     overall_performance_te_rf = performance_te_rf/repeats
     overall_performance_tr_svm = performance_tr_svm/repeats
     overall_performance_te_svm = performance_te_svm/repeats
-
+    """
     # And we run our deterministic classifiers:
-    print "now running deterministic classifiers"
 
     class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.k_nearest_neighbor(selected_train_X, train_y, selected_test_X, gridsearch=True)
     performance_tr_knn = eval.accuracy(train_y, class_train_y)
     performance_te_knn = eval.accuracy(test_y, class_test_y)
+    print "performance_tr_knn", performance_tr_knn
+    print "performance_te_knn", performance_te_knn
+    print "done with knn"
 
     class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.decision_tree(selected_train_X, train_y, selected_test_X, gridsearch=True)
     performance_tr_dt = eval.accuracy(train_y, class_train_y)
     performance_te_dt = eval.accuracy(test_y, class_test_y)
+    print "performance_tr_dt", performance_tr_dt
+    print "performance_te_dt", performance_te_dt
+    print "done with dt"
 
     class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.naive_bayes(selected_train_X, train_y, selected_test_X)
     performance_tr_nb = eval.accuracy(train_y, class_train_y)
     performance_te_nb = eval.accuracy(test_y, class_test_y)
+    print "performance_tr_nb", performance_tr_nb
+    print "performance_te_nb", performance_te_nb
+    print "done with nb"
 
     scores_with_sd = util.print_table_row_performances(feature_names[i], len(selected_train_X.index),
                                                        len(selected_test_X.index),
-                                                       [(overall_performance_tr_nn, overall_performance_te_nn),
-                                                        (overall_performance_tr_rf, overall_performance_te_rf),
-                                                        (overall_performance_tr_svm, overall_performance_te_svm),
-                                                        (performance_tr_knn, performance_te_knn),
+                                                       [(performance_tr_knn, performance_te_knn),
                                                         (performance_tr_dt, performance_te_dt),
                                                         (performance_tr_nb, performance_te_nb)])
     scores_over_all_algs.append(scores_with_sd)
 
-DataViz.plot_performances_classification(['NN', 'RF', 'SVM', 'KNN', 'DT', 'NB'], feature_names, scores_over_all_algs)
+print scores_over_all_algs
+#DataViz.plot_performances_classification(['NN', 'RF', 'SVM', 'KNN', 'DT', 'NB'], feature_names, scores_over_all_algs)
 
 exit(0)
