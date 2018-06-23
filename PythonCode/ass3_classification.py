@@ -1,12 +1,3 @@
-##############################################################
-#                                                            #
-#    Mark Hoogendoorn and Burkhardt Funk (2017)              #
-#    Machine Learning for the Quantified Self                #
-#    Springer                                                #
-#    Chapter 7                                               #
-#                                                            #
-##############################################################
-
 from util.VisualizeDataset import VisualizeDataset
 from Chapter7.PrepareDatasetForLearning import PrepareDatasetForLearning
 from Chapter7.LearningAlgorithms import ClassificationAlgorithms
@@ -25,14 +16,10 @@ import os
 
 
 # Of course we repeat some stuff from Chapter 3, namely to load the dataset
-
 DataViz = VisualizeDataset()
-
 # Read the result from the previous chapter, and make sure the index is of the type datetime.
-
 dataset_path = './intermediate_datafiles_ass3/'
-export_tree_path = 'Example_graphs/Chapter7/'
-
+export_tree_path = 'Example_graphs/ass3/'
 try:
     dataset = pd.read_csv(dataset_path + 'clustering_result.csv', index_col=0)
 except IOError as e:
@@ -43,6 +30,7 @@ if not os.path.exists(export_tree_path):
     os.makedirs(export_tree_path)
 
 dataset.index = dataset.index.to_datetime()
+
 
 # Let us consider our first task, namely the prediction of the label. We consider this as a non-temporal task.
 
@@ -80,16 +68,19 @@ features_after_chapter_5 = list(set().union(basic_features, pca_features, time_f
 
 fs = FeatureSelectionClassification()
 
-features, ordered_features, ordered_scores = fs.forward_selection(50, train_X[features_after_chapter_5], train_y)
+features, ordered_features, ordered_scores = fs.ax_forward_selection_naive_bayes(20, train_X[features_after_chapter_5], train_y)
+#features, ordered_features, ordered_scores = fs.backward_selection(50, train_X[features_after_chapter_5], train_y)
 print ordered_scores
 print ordered_features
 
-plot.plot(range(1, 51), ordered_scores)
+plot.plot(range(1, 21), ordered_scores)
 plot.xlabel('number of features')
 plot.ylabel('accuracy')
 plot.show()
 
-# Based on the plot we select the top 10 features.
+exit(0) #study results
+
+# Based on the plot we select the top 10 features. 7.10.1.2
 
 ################### nog te doen #######################
 selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'press_phone_pressure_temp_mean_ws_120', 'gyr_phone_x_temp_std_ws_120',
@@ -113,6 +104,7 @@ for reg_param in reg_parameters:
     performance_tr = 0
     performance_te = 0
     for i in range(0, repeats):
+        # besluiten of we dit gebruiken...
         class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.feedforward_neural_network(train_X, train_y,
                                                                                                             test_X, hidden_layer_sizes=(250, ), alpha=reg_param, max_iter=500,
                                                                                                             gridsearch=False)
@@ -135,6 +127,8 @@ plot.hold(False)
 plot.show()
 
 # Second, let us consider the influence of certain parameter settings (very related to the regulariztion) and study the impact on performance.
+
+# AXEL --------------------------------------------------------------------------
 
 leaf_settings = [1,2,5,10]
 performance_training = []
