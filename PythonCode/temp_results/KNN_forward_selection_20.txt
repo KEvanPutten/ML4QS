@@ -1,0 +1,3 @@
+[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]
+
+['mag_y_freq_0.8_Hz_ws_40', 'pca_7_temp_std_ws_120', 'mag_x_max_freq', 'gyr_z_freq_2.0_Hz_ws_40', 'gyr_y_freq_0.0_Hz_ws_40', 'mag_z_freq_1.5_Hz_ws_40', 'acc_z_temp_MAD_ws_120', 'acc_y_temp_kurtosis_ws_120', 'mag_x_freq_1.2_Hz_ws_40', 'lin_acc_y_freq_1.8_Hz_ws_40', 'lin_acc_y_freq_0.6_Hz_ws_40', 'gyr_x_freq_1.2_Hz_ws_40', 'lin_acc_y_freq_1.7_Hz_ws_40', 'gyr_y_freq_1.5_Hz_ws_40', 'light_illuminance_temp_kurtosis_ws_120', 'pca_4_temp_kurtosis_ws_120', 'acc_z_max_freq', 'lin_acc_y_freq_0.3_Hz_ws_40', 'acc_x_freq_1.0_Hz_ws_40', 'mag_z_freq_0.3_Hz_ws_40']
