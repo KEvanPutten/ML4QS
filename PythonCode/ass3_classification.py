@@ -59,9 +59,9 @@ print '#time features: ', len(time_features)
 print '#frequency features: ', len(freq_features)
 cluster_features = ['cluster']
 print '#cluster features: ', len(cluster_features)
-features_after_chapter_3 = list(set().union(basic_features, pca_features))
-features_after_chapter_4 = list(set().union(basic_features, pca_features, time_features, freq_features))
-features_after_chapter_5 = list(set().union(basic_features, pca_features, time_features, freq_features, cluster_features))
+features_after_outliers_and_imputation = list(set().union(basic_features, pca_features))
+features_after_domain_features = list(set().union(basic_features, pca_features, time_features, freq_features))
+features_after_cluster_features = list(set().union(basic_features, pca_features, time_features, freq_features, cluster_features))
 
 
 # First, let us consider the performance over a selection of features:
@@ -70,6 +70,9 @@ fs = FeatureSelectionClassification()
 
 features, ordered_features, ordered_scores = fs.ax_forward_selection_naive_bayes(20, train_X[features_after_chapter_5], train_y)
 #features, ordered_features, ordered_scores = fs.backward_selection(50, train_X[features_after_chapter_5], train_y)
+
+# features, ordered_features, ordered_scores = fs.forward_selection(20, train_X[features_after_chapter_5], train_y)
+
 print ordered_scores
 print ordered_features
 
@@ -78,15 +81,25 @@ plot.xlabel('number of features')
 plot.ylabel('accuracy')
 plot.show()
 
-exit(0) #study results
+exit(0)
 
-# Based on the plot we select the top 10 features. 7.10.1.2
+# Based on the plot we select the top 10 features.
+selected_features_with_NB = ['acc_x_temp_MAD_ws_120', 'mag_z_freq_0.0_Hz_ws_40', 'mag_y_freq_0.0_Hz_ws_40',
+                             'lin_acc_y_freq_0.0_Hz_ws_40', 'pca_7_temp_mean_ws_120', 'acc_z_temp_std_ws_120', 'acc_y',
+                             'pca_9_temp_MAD_ws_120', 'mag_x_freq_0.1_Hz_ws_40', 'mag_z_freq_1.1_Hz_ws_40']
 
-################### nog te doen #######################
-selected_features = ['acc_phone_y_freq_0.0_Hz_ws_40', 'press_phone_pressure_temp_mean_ws_120', 'gyr_phone_x_temp_std_ws_120',
-                     'mag_watch_y_pse', 'mag_phone_z_max_freq', 'gyr_watch_y_freq_weighted', 'gyr_phone_y_freq_1.0_Hz_ws_40',
-                     'acc_phone_x_freq_1.9_Hz_ws_40', 'mag_watch_z_freq_0.9_Hz_ws_40', 'acc_watch_y_freq_0.5_Hz_ws_40']
+selected_features_with_KNN = ['mag_y_freq_0.8_Hz_ws_40', 'pca_7_temp_std_ws_120', 'mag_x_max_freq',
+                              'gyr_z_freq_2.0_Hz_ws_40', 'gyr_y_freq_0.0_Hz_ws_40', 'mag_z_freq_1.5_Hz_ws_40',
+                              'acc_z_temp_MAD_ws_120', 'acc_y_temp_kurtosis_ws_120', 'mag_x_freq_1.2_Hz_ws_40',
+                              'lin_acc_y_freq_1.8_Hz_ws_40']
 
+selected_features_with_DT = ['acc_z_freq_0.0_Hz_ws_40', 'loc_height_temp_mean_ws_120', 'pca_4_temp_kurtosis_ws_120',
+                             'lin_acc_y_temp_kurtosis_ws_120', 'pca_1_temp_kurtosis_ws_120', 'acc_z_temp_MAD_ws_120',
+                             'mag_x_freq_1.2_Hz_ws_40', 'gyr_z_freq_2.0_Hz_ws_40', 'acc_y_temp_kurtosis_ws_120',
+                             'lin_acc_y_freq_0.6_Hz_ws_40']
+
+
+################### HASINE #######################
 # Let us first study the impact of regularization and model complexity: does regularization prevent overfitting?
 
 learner = ClassificationAlgorithms()
@@ -126,16 +139,15 @@ plot.hold(False)
 
 plot.show()
 
+################### AXEL #######################
 # Second, let us consider the influence of certain parameter settings (very related to the regulariztion) and study the impact on performance.
-
-# AXEL --------------------------------------------------------------------------
 
 leaf_settings = [1,2,5,10]
 performance_training = []
 performance_test = []
 
 for no_points_leaf in leaf_settings:
-    class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.decision_tree(train_X[selected_features], train_y, test_X[selected_features], min_samples_leaf=no_points_leaf,
+    class_train_y, class_test_y, class_train_prob_y, class_test_prob_y = learner.decision_tree(train_X[selected_features_with_DT], train_y, test_X[selected_features_with_DT], min_samples_leaf=no_points_leaf,
                                                                                                gridsearch=False, print_model_details=False)
     performance_training.append(eval.accuracy(train_y, class_train_y))
     performance_test.append(eval.accuracy(test_y, class_test_y))
@@ -155,7 +167,8 @@ plot.show()
 # of cross validation upon the training set.
 
 
-possible_feature_sets = [basic_features, features_after_chapter_3, features_after_chapter_4, features_after_chapter_5, selected_features]
+possible_feature_sets = [basic_features, features_after_outliers_and_imputation, features_after_domain_features,
+                         features_after_cluster_features, selected_features_with_DT, selected_features_with_NB]
 feature_names = ['initial set', 'Chapter 3', 'Chapter 4', 'Chapter 5', 'Selected features']
 repeats = 5
 
