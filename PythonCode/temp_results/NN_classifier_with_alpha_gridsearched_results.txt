@@ -1,0 +1,44 @@
+0
+1
+2
+C:\Users\kevan\Anaconda2\envs\ML4QS\lib\site-packages\sklearn\neural_network\multilayer_perceptron.py:563: ConvergenceWarning: Stochastic Optimizer: Maximum iterations reached and the optimization hasn't converged yet.
+  % (), ConvergenceWarning)
+3
+4
+initial set  &  0.8714 \emph{( 0.8483 - 0.8946 )}  &  0.8333 \emph{( 0.7940 - 0.8726 )} \\\hline
+0
+1
+2
+3
+4
+After imputation  &  0.8781 \emph{( 0.8555 - 0.9008 )}  &  0.8433 \emph{( 0.8050 - 0.8816 )} \\\hline
+0
+1
+2
+3
+4
+With Domain features  &  0.6378 \emph{( 0.6045 - 0.6710 )}  &  0.6239 \emph{( 0.5728 - 0.6750 )} \\\hline
+0
+1
+2
+3
+4
+With cluster features  &  0.6280 \emph{( 0.5945 - 0.6614 )}  &  0.6289 \emph{( 0.5780 - 0.6798 )} \\\hline
+0
+1
+2
+3
+4
+Selected features DT  &  0.9343 \emph{( 0.9172 - 0.9514 )}  &  0.8833 \emph{( 0.8495 - 0.9172 )} \\\hline
+0
+1
+2
+3
+4
+Selected features NB  &  0.9059 \emph{( 0.8857 - 0.9260 )}  &  0.8717 \emph{( 0.8364 - 0.9069 )} \\\hline
+[[[0.87144563918757467, 0.011569133382688807, 0.83333333333333337, 0.019641855032959652]], [[0.87813620071684573, 0.011307212873729721, 0.84333333333333338, 0.019157405169790247]], [[0.63775388291517321, 0.016613674455188358, 0.62388888888888894, 0.025530566821942224]], [[0.6279569892473118, 0.016707012417606536, 0.62888888888888883, 0.025461717141240126]], [[0.93428912783751505, 0.00856439194393458, 0.88333333333333319, 0.01691938036982341]], [[0.90585424133811221, 0.010094081613377284, 0.8716666666666667, 0.017627621072945663]]]
+
+
+SETTINGS:
+tuned_parameters = [{'hidden_layer_sizes': [(5,), (10,), (25,), (100,), (100,5,), (100,10,),], 'activation': [activation],
+                                 'learning_rate': [learning_rate], 'max_iter': [500, 1000], 'alpha': [0.01, 0.1, 1, 10]}]
